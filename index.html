@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Akash A — Python Django Full Stack Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #faf7f2;
+  --surface: #f3ede3;
+  --card: #ffffff;
+  --border: #e2d9cc;
+  --border2: #c8bfb0;
+  --amber: #c8853a;
+  --amber-light: #e8a85c;
+  --amber-dark: #9c6228;
+  --forest: #2d4a3e;
+  --forest-light: #3d6554;
+  --text: #1a1208;
+  --muted: #7a6e60;
+  --muted2: #a89880;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); overflow-x: hidden; }
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 60px; height: 68px;
+  background: rgba(250,247,242,0.93);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-links a {
+  font-size: 0.8rem; font-weight: 500; color: var(--muted);
+  text-decoration: none; letter-spacing: 0.4px;
+  transition: color 0.25s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+  height: 1.5px; background: var(--amber);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+.nav-links a:hover { color: var(--amber-dark); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.btn-resume {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 600;
+  color: #fff; background: var(--amber);
+  border: none; padding: 10px 20px; border-radius: 4px;
+  text-decoration: none; cursor: pointer;
+  transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+.btn-resume:hover {
+  background: var(--amber-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(200,133,58,0.35);
+}
+.btn-resume svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+section { position: relative; z-index: 1; }
+
+/* HERO */
+.hero-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 400px;
+  align-items: center; gap: 60px;
+  padding: 130px 60px 80px;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 0.72rem;
+  color: var(--amber); letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 28px; opacity: 0; animation: fadeUp 0.7s 0.1s forwards;
+}
+.hero-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--amber);
+  animation: breathe 2s infinite;
+}
+@keyframes breathe {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.7); }
+}
+.hero-name {
+  font-family: var(--serif); font-size: clamp(3.6rem,7vw,6.5rem);
+  font-weight: 900; line-height: 1.0; letter-spacing: -1.5px;
+  margin-bottom: 8px; opacity: 0; animation: fadeUp 0.8s 0.25s forwards;
+}
+.hero-name em { font-style: italic; color: var(--amber); }
+.hero-role {
+  font-family: var(--serif); font-size: clamp(1.1rem,2.5vw,1.7rem);
+  font-weight: 700; font-style: italic; color: var(--forest);
+  margin-bottom: 28px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero-desc {
+  font-size: 1rem; color: var(--muted); line-height: 1.8;
+  max-width: 500px; margin-bottom: 44px;
+  opacity: 0; animation: fadeUp 0.8s 0.55s forwards;
+}
+.hero-desc strong { color: var(--text); }
+.hero-actions {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+}
+.btn-main {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--sans); font-size: 0.85rem; font-weight: 600;
+  padding: 13px 26px; border-radius: 4px;
+  text-decoration: none; transition: all 0.25s;
+}
+.btn-filled { background: var(--forest); color: #fff; }
+.btn-filled:hover { background: var(--forest-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,74,62,0.25); }
+.btn-outline { border: 1.5px solid var(--border2); color: var(--text); background: transparent; }
+.btn-outline:hover { border-color: var(--amber); color: var(--amber-dark); transform: translateY(-2px); }
+
+.hero-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 40px 36px;
+  box-shadow: 0 12px 48px rgba(26,18,8,0.08);
+  opacity: 0; animation: fadeUp 1s 0.85s forwards;
+}
+.hero-card-title {
+  font-family: var(--serif); font-size: 1.05rem; font-weight: 700;
+  margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.hc-stat {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.hc-stat:last-child { border-bottom: none; }
+.hc-label { font-size: 0.78rem; color: var(--muted); }
+.hc-val { font-family: var(--mono); font-size: 0.78rem; color: var(--text); font-weight: 500; }
+.hc-val.amber { color: var(--amber-dark); font-weight: 600; }
+.hc-val.green { color: var(--forest); font-weight: 600; }
+.avail-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; font-weight: 600; color: var(--forest);
+  background: rgba(45,74,62,0.1); padding: 4px 10px;
+  border-radius: 20px; border: 1px solid rgba(45,74,62,0.2);
+}
+.avail-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--forest); animation: breathe 2s infinite; }
+
+/* SECTIONS */
+.section-wrap { max-width: 1100px; margin: 0 auto; padding: 96px 60px; }
+.s-eyebrow { font-family: var(--mono); font-size: 0.7rem; color: var(--amber); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.s-title { font-family: var(--serif); font-size: clamp(2rem,4vw,3rem); font-weight: 900; color: var(--text); margin-bottom: 56px; line-height: 1.1; }
+.s-title em { font-style: italic; color: var(--amber); }
+
+/* ABOUT */
+#about { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: start; }
+.about-body p { font-size: 0.97rem; color: var(--muted); line-height: 1.85; margin-bottom: 18px; }
+.about-body p strong { color: var(--text); font-weight: 600; }
+.info-list { display: flex; flex-direction: column; }
+.info-row { display: flex; align-items: flex-start; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+.info-row:first-child { border-top: 1px solid var(--border); }
+.ir-icon { width: 38px; height: 38px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.ir-body strong { display: block; font-size: 0.87rem; font-weight: 600; margin-bottom: 2px; }
+.ir-body span { font-size: 0.79rem; color: var(--muted); }
+
+/* SKILLS */
+#skills { background: var(--bg); }
+.skills-wrap { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.sk-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 28px 24px; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; }
+.sk-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(26,18,8,0.1); border-color: var(--amber-light); }
+.sk-icon { font-size: 1.6rem; margin-bottom: 14px; }
+.sk-cat { font-size: 0.7rem; font-weight: 600; color: var(--amber-dark); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; font-family: var(--mono); }
+.sk-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+.sk-tag { font-size: 0.75rem; font-weight: 500; padding: 5px 11px; border-radius: 4px; background: var(--surface); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; }
+.sk-tag:hover { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+/* EXPERIENCE */
+#experience { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.exp-timeline { position: relative; padding-left: 32px; }
+.exp-timeline::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 1px; background: linear-gradient(180deg, var(--amber), var(--forest)); }
+.exp-node { position: absolute; left: -5px; top: 14px; width: 11px; height: 11px; border-radius: 50%; background: var(--amber); border: 2px solid var(--bg); }
+.exp-block { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 36px; position: relative; transition: box-shadow 0.3s; }
+.exp-block:hover { box-shadow: 0 12px 36px rgba(26,18,8,0.08); }
+.exp-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 6px; }
+.exp-title { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; }
+.exp-badge { font-family: var(--mono); font-size: 0.7rem; color: var(--amber-dark); background: rgba(200,133,58,0.1); border: 1px solid rgba(200,133,58,0.25); padding: 5px 12px; border-radius: 4px; }
+.exp-co { font-size: 0.88rem; font-weight: 600; color: var(--forest); margin-bottom: 22px; }
+.exp-ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.exp-ul li { font-size: 0.9rem; color: var(--muted); line-height: 1.7; padding-left: 18px; position: relative; }
+.exp-ul li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--amber-light); }
+
+/* PROJECTS */
+#projects { background: var(--bg); }
+.proj-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 28px; }
+.proj-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 36px; transition: all 0.35s; position: relative; overflow: hidden; }
+.proj-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--amber), var(--forest)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s cubic-bezier(.4,0,.2,1); }
+.proj-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(26,18,8,0.12); border-color: var(--border2); }
+.proj-card:hover::after { transform: scaleX(1); }
+.proj-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted2); letter-spacing: 2px; margin-bottom: 18px; }
+.proj-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; }
+.proj-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
+.proj-stack { display: flex; flex-wrap: wrap; gap: 7px; }
+.proj-tag { font-family: var(--mono); font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border); color: var(--muted); background: var(--surface); transition: all 0.2s; }
+.proj-tag:hover { background: var(--amber); border-color: var(--amber); color: #fff; }
+
+/* EDUCATION */
+#education { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.edu-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 44px; display: flex; gap: 40px; align-items: flex-start; box-shadow: 0 4px 20px rgba(26,18,8,0.05); }
+.edu-icon { width: 64px; height: 64px; border-radius: 12px; background: linear-gradient(135deg, var(--amber), var(--amber-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+.edu-degree { font-family: var(--serif); font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+.edu-inst { font-size: 0.95rem; font-weight: 600; color: var(--forest); margin-bottom: 12px; }
+.edu-period { display: inline-block; font-family: var(--mono); font-size: 0.72rem; color: var(--amber-dark); background: rgba(200,133,58,0.1); border: 1px solid rgba(200,133,58,0.2); padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+.edu-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.75; }
+
+/* CONTACT */
+#contact { background: var(--bg); }
+.contact-split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.contact-intro p { font-size: 0.97rem; color: var(--muted); line-height: 1.85; margin-bottom: 28px; }
+.contact-methods { display: flex; flex-direction: column; gap: 12px; }
+.c-link { display: flex; align-items: center; gap: 16px; padding: 16px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--text); font-size: 0.88rem; font-weight: 500; transition: all 0.25s; }
+.c-link:hover { border-color: var(--amber-light); color: var(--amber-dark); transform: translateX(6px); box-shadow: 0 4px 16px rgba(200,133,58,0.1); }
+.c-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+.cta-box { background: linear-gradient(135deg, var(--forest) 0%, var(--forest-light) 100%); border-radius: 16px; padding: 56px 44px; text-align: center; color: #fff; box-shadow: 0 20px 60px rgba(45,74,62,0.25); }
+.cta-box h3 { font-family: var(--serif); font-size: 1.9rem; font-weight: 900; margin-bottom: 12px; }
+.cta-box p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 32px; line-height: 1.6; }
+.btn-cta { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 0.85rem; font-weight: 600; background: #fff; color: var(--forest); padding: 13px 28px; border-radius: 6px; text-decoration: none; transition: all 0.25s; }
+.btn-cta:hover { background: var(--amber); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 24px 60px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; background: var(--surface); }
+footer p { font-size: 0.78rem; color: var(--muted2); }
+footer strong { color: var(--amber-dark); }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+.reveal { opacity:0; transform:translateY(32px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity:1; transform:none; }
+.d1 { transition-delay:0.1s; }
+.d2 { transition-delay:0.2s; }
+.d3 { transition-delay:0.3s; }
+
+@media (max-width: 960px) {
+  nav { padding: 0 24px; }
+  .nav-links { gap: 18px; }
+  .hero-inner { grid-template-columns:1fr; padding:100px 24px 60px; }
+  .hero-card { display:none; }
+  .section-wrap { padding:72px 24px; }
+  .about-grid, .contact-split { grid-template-columns:1fr; gap:40px; }
+  .skills-wrap { grid-template-columns:repeat(2,1fr); }
+  .proj-grid { grid-template-columns:1fr; }
+  footer { padding:20px 24px; flex-direction:column; gap:6px; text-align:center; }
+}
+@media (max-width: 560px) {
+  .skills-wrap { grid-template-columns:1fr; }
+  .edu-card { flex-direction:column; gap:20px; }
+  .nav-links { gap:12px; }
+  .nav-links a { font-size:0.72rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="Akash_A_Resume_ATS.docx" class="btn-resume" id="resumeBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Download CV
+  </a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="hero-dot"></span>Available for opportunities</div>
+      <h1 class="hero-name">Akash <em>A.</em></h1>
+      <div class="hero-role">Python · Django · Full Stack Developer</div>
+      <p class="hero-desc">Computer Science graduate building scalable web applications with clean backends, robust APIs, and intuitive frontends. Based in <strong>Kannur, Kerala</strong>.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-main btn-filled">View My Projects</a>
+        <a href="#contact" class="btn-main btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Quick Profile</div>
+      <div class="hc-stat"><span class="hc-label">Role</span><span class="hc-val amber">Full Stack Dev</span></div>
+      <div class="hc-stat"><span class="hc-label">Stack</span><span class="hc-val">Python · Django · React</span></div>
+      <div class="hc-stat"><span class="hc-label">Experience</span><span class="hc-val">1 Year Internship</span></div>
+      <div class="hc-stat"><span class="hc-label">Education</span><span class="hc-val">BCA · IGNOU</span></div>
+      <div class="hc-stat"><span class="hc-label">Location</span><span class="hc-val">Kannur, Kerala 🇮🇳</span></div>
+      <div class="hc-stat"><span class="hc-label">Status</span><div class="avail-badge"><span class="avail-dot"></span>Open to Work</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="s-eyebrow">about me</div>
+    <h2 class="s-title reveal">The Story <em>So Far</em></h2>
+    <div class="about-grid">
+      <div class="about-body reveal">
+        <p>I'm a <strong>passionate Computer Science graduate</strong> specialising in Python, Django, and React.js. I build full-stack web applications that are reliable, maintainable, and performant.</p>
+        <p>During my internship at <strong>Quest Innovation Solutions</strong>, I worked end-to-end on real projects — designing REST APIs, managing databases, building React frontends, and optimising backend performance.</p>
+        <p>I'm a quick learner who enjoys tackling challenging problems and contributing to teams that care about clean code and great user experiences.</p>
+      </div>
+      <div class="info-list reveal d1">
+        <div class="info-row"><div class="ir-icon">🎓</div><div class="ir-body"><strong>BCA — IGNOU University</strong><span>Bachelor of Computer Application · 2021–2024</span></div></div>
+        <div class="info-row"><div class="ir-icon">🏢</div><div class="ir-body"><strong>Quest Innovation Solutions</strong><span>Python Full Stack Intern · Calicut, Kerala</span></div></div>
+        <div class="info-row"><div class="ir-icon">📍</div><div class="ir-body"><strong>Kannur, Kerala, India</strong><span>Open to remote & on-site roles</span></div></div>
+        <div class="info-row"><div class="ir-icon">🗣️</div><div class="ir-body"><strong>Languages</strong><span>English (Professional) · Malayalam (Native)</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="s-eyebrow">technical skills</div>
+    <h2 class="s-title reveal">What I <em>Build With</em></h2>
+    <div class="skills-wrap">
+      <div class="sk-card reveal"><div class="sk-icon">🐍</div><div class="sk-cat">Languages</div><div class="sk-tags"><span class="sk-tag">Python</span><span class="sk-tag">JavaScript</span><span class="sk-tag">C</span></div></div>
+      <div class="sk-card reveal d1"><div class="sk-icon">🎨</div><div class="sk-cat">Frontend</div><div class="sk-tags"><span class="sk-tag">React.js</span><span class="sk-tag">HTML5</span><span class="sk-tag">CSS3</span><span class="sk-tag">Bootstrap</span></div></div>
+      <div class="sk-card reveal d2"><div class="sk-icon">⚙️</div><div class="sk-cat">Backend</div><div class="sk-tags"><span class="sk-tag">Django</span><span class="sk-tag">DRF</span><span class="sk-tag">REST APIs</span></div></div>
+      <div class="sk-card reveal"><div class="sk-icon">🗄️</div><div class="sk-cat">Databases</div><div class="sk-tags"><span class="sk-tag">MySQL</span><span class="sk-tag">SQLite</span></div></div>
+      <div class="sk-card reveal d1"><div class="sk-icon">🛠️</div><div class="sk-cat">Dev Tools</div><div class="sk-tags"><span class="sk-tag">Git</span><span class="sk-tag">GitHub</span><span class="sk-tag">VS Code</span></div></div>
+      <div class="sk-card reveal d2"><div class="sk-icon">🤝</div><div class="sk-cat">Soft Skills</div><div class="sk-tags"><span class="sk-tag">Problem Solving</span><span class="sk-tag">Communication</span><span class="sk-tag">Time Management</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-wrap">
+    <div class="s-eyebrow">work experience</div>
+    <h2 class="s-title reveal">Where I've <em>Worked</em></h2>
+    <div class="exp-timeline">
+      <div class="exp-node"></div>
+      <div class="exp-block reveal">
+        <div class="exp-top">
+          <div class="exp-title">Python Full Stack Developer Intern</div>
+          <div class="exp-badge">2023 – 2024</div>
+        </div>
+        <div class="exp-co">Quest Innovation Solutions · Calicut, Kerala, India</div>
+        <ul class="exp-ul">
+          <li>Built full-stack web applications using Python, Django, HTML, CSS, JavaScript, and React.js — owning both frontend and backend end-to-end.</li>
+          <li>Designed and implemented RESTful APIs using Django REST Framework (DRF), enabling clean integration between client and server.</li>
+          <li>Managed relational databases with MySQL — designed schemas, wrote optimised queries, and maintained data integrity.</li>
+          <li>Applied backend performance optimisation techniques, improving response times and application scalability.</li>
+          <li>Participated in code reviews, maintained Git repositories, and worked within an agile team environment.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-wrap">
+    <div class="s-eyebrow">projects</div>
+    <h2 class="s-title reveal">Things I've <em>Built</em></h2>
+    <div class="proj-grid">
+      <div class="proj-card reveal">
+        <div class="proj-num">01 — PROJECT</div>
+        <div class="proj-title">Complaint Management System</div>
+        <div class="proj-desc">A full-stack web app that automates complaint lifecycle management — from submission and assignment to resolution tracking. Replaced manual workflows with a structured digital process, improving team efficiency and accountability.</div>
+        <div class="proj-stack"><span class="proj-tag">Django</span><span class="proj-tag">Python</span><span class="proj-tag">JavaScript</span><span class="proj-tag">HTML/CSS</span><span class="proj-tag">SQLite</span></div>
+      </div>
+      <div class="proj-card reveal d1">
+        <div class="proj-num">02 — PROJECT</div>
+        <div class="proj-title">Vehicle Fleet Management System with AI</div>
+        <div class="proj-desc">A smart fleet tracking and management platform built with Django. Features AI-driven vehicle monitoring, real-time data analysis, and decision-support tools to help fleet managers operate more efficiently.</div>
+        <div class="proj-stack"><span class="proj-tag">Django</span><span class="proj-tag">Python</span><span class="proj-tag">React.js</span><span class="proj-tag">JavaScript</span><span class="proj-tag">SQLite</span><span class="proj-tag">AI/ML</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-wrap">
+    <div class="s-eyebrow">education</div>
+    <h2 class="s-title reveal">Academic <em>Background</em></h2>
+    <div class="edu-card reveal">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <div class="edu-degree">Bachelor of Computer Applications (BCA)</div>
+        <div class="edu-inst">IGNOU University</div>
+        <div class="edu-period">2021 – 2024</div>
+        <div class="edu-desc">Studied computer science fundamentals, software development, database systems, and web technologies. Built a strong foundation in Python, data structures, algorithms, and object-oriented programming — directly applicable to full-stack web development.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="s-eyebrow">contact</div>
+    <h2 class="s-title reveal">Let's Work <em>Together</em></h2>
+    <div class="contact-split">
+      <div>
+        <div class="contact-intro reveal">
+          <p>I'm actively looking for full-stack developer roles where I can contribute to meaningful products and grow as an engineer. Open to full-time, contract, and remote opportunities.</p>
+        </div>
+        <div class="contact-methods reveal d1">
+          <a href="mailto:akash178288@gmail.com" class="c-link"><div class="c-icon">✉️</div>akash178288@gmail.com</a>
+          <a href="tel:+916282780697" class="c-link"><div class="c-icon">📞</div>+91 6282780697</a>
+          <a href="#" class="c-link"><div class="c-icon">💼</div>LinkedIn — Add your URL</a>
+          <a href="#" class="c-link"><div class="c-icon">🐙</div>GitHub — Add your URL</a>
+        </div>
+      </div>
+      <div class="cta-box reveal d2">
+        <h3>Open to Work</h3>
+        <p>Full-time · Contract · Remote<br>Available immediately</p>
+        <a href="mailto:akash178288@gmail.com" class="btn-cta">Send Me an Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 <strong>Akash A</strong> · Python Django Full Stack Developer</p>
+  <p>Kannur, Kerala, India</p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Resume download — generates a plain-text CV file
+// 👉 To link a real PDF, replace this with: window.location.href = 'Akash_A_Resume.pdf';
+document.getElementById('resumeBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  const content = `AKASH A
+Python Django Full Stack Developer
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
++91 6282780697  |  akash178288@gmail.com  |  Kannur, Kerala, India
+
+PROFESSIONAL SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Computer Science graduate with experience building scalable full-stack web
+applications using Python, Django, and React.js. Proficient in RESTful API
+development with Django REST Framework, MySQL/SQLite database management,
+and frontend development. Eager to contribute to innovative teams.
+
+INTERNSHIP EXPERIENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Python Full Stack Developer Intern
+Quest Innovation Solutions | Calicut, Kerala | 2023 – 2024
+
+• Built full-stack web applications using Python, Django, React.js, HTML, CSS, JS
+• Implemented RESTful APIs using Django REST Framework (DRF)
+• Managed relational databases with MySQL; optimised SQL queries
+• Applied backend performance optimisation techniques
+• Collaborated in code reviews, used Git for version control
+
+TECHNICAL SKILLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Languages       : Python, JavaScript, C
+Frontend        : React.js, HTML5, CSS3, Bootstrap
+Backend         : Django, Django REST Framework (DRF)
+Databases       : MySQL, SQLite
+Tools           : Git, GitHub, VS Code, DB Browser
+Soft Skills     : Problem Solving, Communication, Time Management
+
+PROJECTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Complaint Management System
+   Stack: Django · Python · JavaScript · HTML/CSS · SQLite
+   Automated complaint lifecycle from submission to resolution.
+
+2. Vehicle Fleet Management System with AI
+   Stack: Django · Python · React.js · SQLite · AI/ML
+   Smart fleet tracking with AI monitoring and real-time analysis.
+
+EDUCATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Bachelor of Computer Applications (BCA)
+IGNOU University | 2021 – 2024
+
+LANGUAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+English (Professional Proficiency)  |  Malayalam (Native)`;
+
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'Akash_A_Resume.txt';
+  a.click(); URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
